@@ -6,6 +6,7 @@
 #include <PyMaterialX/PyMaterialX.h>
 
 #include <MaterialXGenShader/TypeDesc.h>
+#include <MaterialXGenShader/GenContext.h>
 
 namespace py = pybind11;
 namespace mx = MaterialX;
@@ -16,7 +17,6 @@ void bindPyTypeDesc(py::module& mod)
     // by the container they are stored in and should not be destroyed when 
     // garbage collected by the python interpreter
     py::class_<mx::TypeDesc, std::unique_ptr<MaterialX::TypeDesc, py::nodelete>>(mod, "TypeDesc")
-        .def_static("get", &mx::TypeDesc::get)
         .def("getName", &mx::TypeDesc::getName)
         .def("getBaseType", &mx::TypeDesc::getBaseType)
         .def("getSemantic", &mx::TypeDesc::getSemantic)

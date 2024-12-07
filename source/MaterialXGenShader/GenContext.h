@@ -21,6 +21,9 @@ MATERIALX_NAMESPACE_BEGIN
 
 class ClosureContext;
 
+class Document;
+using DocumentPtr = shared_ptr<Document>;
+
 /// A standard function to allow for handling of application variables for a given node
 using ApplicationVariableHandler = std::function<void(ShaderNode*, GenContext&)>;
 
@@ -220,6 +223,24 @@ class MX_GENSHADER_API GenContext
         return _applicationVariableHandler;
     }
 
+    //
+    // TypeDesc methods
+    //
+
+    void registerTypeDefs(const DocumentPtr doc);
+
+    /// Register an existing TypeDesc for this context.
+    void registerTypeDesc(TypeDesc typeDesc);
+
+    /// Create and register a new TypeDesc with the given configuration.
+    void registerTypeDesc(const string& name, uint8_t basetype, uint8_t semantic = TypeDesc::SEMANTIC_NONE, uint8_t size = 1, ConstStructMemberDescVecPtr structMembers = nullptr);
+
+    /// Return a TypeDesc for the given type name.
+    /// The TypeDesc must be registered in the context first.
+    TypeDesc getTypeDesc(const string& name) const;
+
+    const StringVec& getStructTypeDescNames() const;
+
   protected:
     GenContext() = delete;
 
@@ -237,6 +258,22 @@ class MX_GENSHADER_API GenContext
     vector<ConstNodePtr> _parentNodes;
 
     ApplicationVariableHandler _applicationVariableHandler;
+
+  private:
+    // Internal storage of registered type descriptors
+    using TypeDescMap = std::unordered_map<string, TypeDesc>;
+    TypeDescMap _typeDescMap;
+
+    // Internal storage of name strings for type descriptors
+    // that are created by this context.
+    using ConstStringPtr = std::shared_ptr<const string>;
+    vector<ConstStringPtr> _typeDescNameStorage;
+
+    // It's important to record the order of the struct types and register their syntax entries in the order
+    // they were added (this is reflected in the struct index).  This ensures that any struct
+    // types used for members of another struct are declared in the correct order in the
+    // generated shader code.
+    StringVec _structTypeDescOrder;
 };
 
 /// @class ClosureContext

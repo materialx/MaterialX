@@ -197,7 +197,7 @@ ShaderNodeImplPtr LayerableNodeMdl::create()
     return std::make_shared<LayerableNodeMdl>();
 }
 
-void LayerableNodeMdl::addInputs(ShaderNode& node, GenContext& /*context*/) const
+void LayerableNodeMdl::addInputs(ShaderNode& node, GenContext&) const
 {
     // Add the input to hold base layer BSDF.
     node.addInput(StringConstantsMdl::BASE, Type::BSDF);

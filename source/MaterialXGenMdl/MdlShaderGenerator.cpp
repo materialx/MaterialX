@@ -176,7 +176,7 @@ ShaderPtr MdlShaderGenerator::generate(const string& name, ElementPtr element, G
     emitScopeBegin(stage, Syntax::PARENTHESES);
 
     // Emit shader inputs
-    emitShaderInputs(element->getDocument(), stage.getInputBlock(MDL::INPUTS), stage);
+    emitShaderInputs(element->getDocument(), stage.getInputBlock(MDL::INPUTS), context, stage);
 
     // End shader signature
     emitScopeEnd(stage);
@@ -333,7 +333,7 @@ ShaderNodeImplPtr MdlShaderGenerator::getImplementation(const NodeDef& nodedef, 
         throw ExceptionShaderGenError("NodeDef '" + nodedef.getName() + "' has no outputs defined");
     }
 
-    const TypeDesc outputType = TypeDesc::get(outputs[0]->getType());
+    const TypeDesc outputType = context.getTypeDesc(outputs[0]->getType());
 
     if (implElement->isA<NodeGraph>())
     {
@@ -658,7 +658,7 @@ void emitInputAnnotations(const MdlShaderGenerator& _this, const DocumentPtr doc
 
 } // anonymous namespace
 
-void MdlShaderGenerator::emitShaderInputs(const DocumentPtr doc, const VariableBlock& inputs, ShaderStage& stage) const
+void MdlShaderGenerator::emitShaderInputs(const DocumentPtr doc, const VariableBlock& inputs, const GenContext& context, ShaderStage& stage) const
 {
     const string uniformPrefix = _syntax->getUniformQualifier() + " ";
     for (size_t i = 0; i < inputs.size(); ++i)
@@ -668,7 +668,7 @@ void MdlShaderGenerator::emitShaderInputs(const DocumentPtr doc, const VariableB
         const string& qualifier = input->isUniform() || input->getType() == Type::FILENAME ? uniformPrefix : EMPTY_STRING;
         const string& type = _syntax->getTypeName(input->getType());
 
-        string value = input->getValue() ? _syntax->getValue(input->getType(), *input->getValue(), true) : EMPTY_STRING;
+        string value = input->getValue() ? _syntax->getValue(input->getType(), *input->getValue(), context, true) : EMPTY_STRING;
         const string& geomprop = input->getGeomProp();
         if (!geomprop.empty())
         {
@@ -751,6 +751,19 @@ const string& MdlShaderGenerator::getMdlVersionFilenameSuffix(GenContext& contex
 void MdlShaderGenerator::emitMdlVersionFilenameSuffix(GenContext& context, ShaderStage& stage) const
 {
     emitString(getMdlVersionFilenameSuffix(context), stage);
+}
+
+void MdlShaderGenerator::registerBuiltinTypes(GenContext& context)
+{
+    ShaderGenerator::registerBuiltinTypes(context);
+
+    // Custom types to handle enumeration output
+    context.registerTypeDesc(Type::MDL_COORDINATESPACE);
+    context.registerTypeDesc(Type::MDL_ADDRESSMODE);
+    context.registerTypeDesc(Type::MDL_FILTERLOOKUPMODE);
+    context.registerTypeDesc(Type::MDL_FILTERTYPE);
+    context.registerTypeDesc(Type::MDL_DISTRIBUTIONTYPE);
+    context.registerTypeDesc(Type::MDL_SCATTER_MODE);
 }
 
 namespace MDL

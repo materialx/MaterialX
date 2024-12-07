@@ -44,7 +44,7 @@ void LightShaderNodeMsl::initialize(const InterfaceElement& element, GenContext&
     NodeDefPtr nodeDef = impl.getNodeDef();
     for (InputPtr input : nodeDef->getActiveInputs())
     {
-        _lightUniforms.add(TypeDesc::get(input->getType()), input->getName(), input->getValue());
+        _lightUniforms.add(context.getTypeDesc(input->getType()), input->getName(), input->getValue());
     }
 }
 

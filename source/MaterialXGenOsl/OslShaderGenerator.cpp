@@ -123,7 +123,7 @@ ShaderPtr OslShaderGenerator::generate(const string& name, ElementPtr element, G
             const ShaderMetadata& data = metadata->at(j);
             const string& delim = (j == metadata->size() - 1) ? EMPTY_STRING : Syntax::COMMA;
             const string& dataType = _syntax->getTypeName(data.type);
-            const string dataValue = _syntax->getValue(data.type, *data.value, true);
+            const string dataValue = _syntax->getValue(data.type, *data.value, context, true);
             emitLine(dataType + " " + data.name + " = " + dataValue + delim, stage, false);
         }
     }
@@ -133,8 +133,8 @@ ShaderPtr OslShaderGenerator::generate(const string& name, ElementPtr element, G
     emitScopeBegin(stage, Syntax::PARENTHESES);
 
     // Emit shader inputs
-    emitShaderInputs(stage.getInputBlock(OSL::INPUTS), stage);
-    emitShaderInputs(stage.getUniformBlock(OSL::UNIFORMS), stage);
+    emitShaderInputs(stage.getInputBlock(OSL::INPUTS), context, stage);
+    emitShaderInputs(stage.getUniformBlock(OSL::UNIFORMS), context, stage);
 
     // Emit shader output
     const VariableBlock& outputs = stage.getOutputBlock(OSL::OUTPUTS);
@@ -372,7 +372,7 @@ void OslShaderGenerator::emitLibraryIncludes(ShaderStage& stage, GenContext& con
     emitLineBreak(stage);
 }
 
-void OslShaderGenerator::emitShaderInputs(const VariableBlock& inputs, ShaderStage& stage) const
+void OslShaderGenerator::emitShaderInputs(const VariableBlock& inputs, const GenContext& context, ShaderStage& stage) const
 {
     static const std::unordered_map<string, string> GEOMPROP_DEFINITIONS =
     {
@@ -407,7 +407,7 @@ void OslShaderGenerator::emitShaderInputs(const VariableBlock& inputs, ShaderSta
             // Add the file string input
             emitLineBegin(stage);
             emitString("string " + input->getVariable() + " = \"" + valueStr + "\"", stage);
-            emitMetadata(input, stage);
+            emitMetadata(input, context, stage);
             emitString(",", stage);
             emitLineEnd(stage, false);
 
@@ -424,7 +424,7 @@ void OslShaderGenerator::emitShaderInputs(const VariableBlock& inputs, ShaderSta
             emitLineBegin(stage);
             emitString(type + " " + input->getVariable(), stage);
 
-            string value = _syntax->getValue(input, true);
+            string value = _syntax->getValue(input, context, true);
             const string& geomprop = input->getGeomProp();
             if (!geomprop.empty())
             {
@@ -440,7 +440,7 @@ void OslShaderGenerator::emitShaderInputs(const VariableBlock& inputs, ShaderSta
             }
 
             emitString(" = " + value, stage);
-            emitMetadata(input, stage);
+            emitMetadata(input, context, stage);
         }
 
         if (i < inputs.size())
@@ -465,7 +465,7 @@ void OslShaderGenerator::emitShaderOutputs(const VariableBlock& outputs, ShaderS
     }
 }
 
-void OslShaderGenerator::emitMetadata(const ShaderPort* port, ShaderStage& stage) const
+void OslShaderGenerator::emitMetadata(const ShaderPort* port, const GenContext& context, ShaderStage& stage) const
 {
     static const std::unordered_map<TypeDesc, ShaderMetadata, TypeDesc::Hasher> UI_WIDGET_METADATA =
     {
@@ -500,7 +500,7 @@ void OslShaderGenerator::emitMetadata(const ShaderPort* port, ShaderStage& stage
                 {
                     const string& delim = (widgetMetadata || j < metadata->size() - 1) ? Syntax::COMMA : EMPTY_STRING;
                     const string& dataType = _syntax->getTypeName(data.type);
-                    const string dataValue = _syntax->getValue(data.type, *data.value, true);
+                    const string dataValue = _syntax->getValue(data.type, *data.value, context, true);
                     metadataLines.push_back(dataType + " " + data.name + " = " + dataValue + delim);
                 }
             }
@@ -508,7 +508,7 @@ void OslShaderGenerator::emitMetadata(const ShaderPort* port, ShaderStage& stage
         if (widgetMetadata)
         {
             const string& dataType = _syntax->getTypeName(widgetMetadata->type);
-            const string dataValue = _syntax->getValue(widgetMetadata->type, *widgetMetadata->value, true);
+            const string dataValue = _syntax->getValue(widgetMetadata->type, *widgetMetadata->value, context, true);
             metadataLines.push_back(dataType + " " + widgetMetadata->name + " = " + dataValue);
         }
         if (metadataLines.size())

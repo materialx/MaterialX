@@ -246,6 +246,7 @@ class MX_GENSHADER_API ShaderPort : public std::enable_shared_from_this<ShaderPo
   protected:
     ShaderNode* _node;
     TypeDesc _type;
+    string _typeName;
     string _name;
     string _path;
     string _semantic;

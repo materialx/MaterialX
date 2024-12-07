@@ -38,7 +38,7 @@ ShaderNodeImplPtr ScalarUnitNode::create(LinearUnitConverterPtr scalarUnitConver
     return std::make_shared<ScalarUnitNode>(scalarUnitConverter);
 }
 
-void ScalarUnitNode::initialize(const InterfaceElement& element, GenContext& /*context*/)
+void ScalarUnitNode::initialize(const InterfaceElement& element, GenContext&)
 {
     _name = element.getName();
 

@@ -472,7 +472,7 @@ void RenderView::updateMaterials(mx::TypedElementPtr typedElem)
                 std::string udim = mat->getUdim();
                 if (!udim.empty())
                 {
-                    if ((udimElement == elem) && udimMaterial && false)
+                    if ((udimElement == elem) && udimMaterial)
                     {
                         // Reuse existing material for all udims
                         mat->copyShader(udimMaterial);

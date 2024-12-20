@@ -6,7 +6,7 @@
   </image>
 
   <geominfo name="G_Bunny" geom="/">
-    <geomprop name="udimset" type="stringarray" value="1001, 1002, 1003" />
+    <geomprop name="udimset" type="stringarray" value="1001, 1002, 1003, 1011, 1012, 1013" />
   </geominfo>
 
   <standard_surface name="S_Bunny" type="surfaceshader">

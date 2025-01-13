@@ -22,9 +22,17 @@ using GlslShaderGeneratorPtr = shared_ptr<class GlslShaderGenerator>;
 class MX_GENGLSL_API GlslShaderGenerator : public HwShaderGenerator
 {
   public:
-    GlslShaderGenerator();
+    /// Constructor.
+    /// Optionally pass in an externally created TypeSystem here, 
+    /// if you want to keep type descriptions alive after the lifetime
+    /// of the shader generator.
+    GlslShaderGenerator(TypeSystemPtr typeSystem = TypeSystem::create());
 
-    static ShaderGeneratorPtr create() { return std::make_shared<GlslShaderGenerator>(); }
+    /// Creator function.
+    /// Optionally pass in an externally created TypeSystem here, 
+    /// if you want to keep type descriptions alive after the lifetime
+    /// of the shader generator.
+    static ShaderGeneratorPtr create(TypeSystemPtr typeSystem = TypeSystem::create()) { return std::make_shared<GlslShaderGenerator>(typeSystem); }
 
     /// Generate a shader starting from the given element, translating
     /// the element and all dependencies upstream into shader code.

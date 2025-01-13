@@ -19,8 +19,8 @@ void bindPyOslShaderGenerator(py::module& mod)
     mod.attr("OSL_OUTPUTS") = mx::OSL::OUTPUTS;
 
     py::class_<mx::OslShaderGenerator, mx::ShaderGenerator, mx::OslShaderGeneratorPtr>(mod, "OslShaderGenerator")
-        .def_static("create", &mx::OslShaderGenerator::create)
-        .def(py::init<>())
+        .def_static("create", &mx::OslShaderGenerator::create, py::arg("typeSystem") = mx::TypeSystem::create())
+        .def(py::init<mx::TypeSystemPtr>(), py::arg("typeSystem") = mx::TypeSystem::create())
         .def("getTarget", &mx::OslShaderGenerator::getTarget)
         .def("generate", &mx::OslShaderGenerator::generate);
 }

@@ -476,27 +476,6 @@ vec4 mx_fractal3d_noise_vec4(vec3 p, int octaves, float lacunarity, float dimini
     return vec4(c, f);
 }
 
-// These wrappers are provided as a backwards compatible shim after renaming mx_fractal_noise_float() to
-// mx_fractal3d_noise_float() when mx_fractal2d_noise_float() was added.
-// These should be considered deprecated and should be removed in a future API "breaking" release of
-// MaterialX.
-float mx_fractal_noise_float(vec3 p, int octaves, float lacunarity, float diminish)
-{
-    return mx_fractal3d_noise_float(p, octaves, lacunarity, diminish);
-}
-vec3 mx_fractal_noise_vec3(vec3 p, int octaves, float lacunarity, float diminish)
-{
-    return mx_fractal3d_noise_vec3(p, octaves, lacunarity, diminish);
-}
-vec2 mx_fractal_noise_vec2(vec3 p, int octaves, float lacunarity, float diminish)
-{
-    return mx_fractal3d_noise_vec2(p, octaves, lacunarity, diminish);
-}
-vec4 mx_fractal_noise_vec4(vec3 p, int octaves, float lacunarity, float diminish)
-{
-    return mx_fractal3d_noise_vec4(p, octaves, lacunarity, diminish);
-}
-
 vec2 mx_worley_cell_position(int x, int y, int xoff, int yoff, float jitter)
 {
     vec3  tmp = mx_cell_noise_vec3(vec2(x+xoff, y+yoff));

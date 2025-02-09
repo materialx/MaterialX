@@ -530,10 +530,7 @@ export float4 mx_fractal2d_noise_float4(
     return float4(c.x, c.y, c.z, a);
 }
 
-// TODO - do we want to rename these to mx_fractal3D_noise_float - if so where else might things need to be updated
-// leaving this refactor out of the current PR for now as I don't have a good MDL test setup.
-
-export float mx_fractal_noise_float(
+export float mx_fractal3d_noise_float(
   float3 mxp_p = state::transform_point(state::coordinate_internal, state::coordinate_object, state::position()),
   int mxp_octaves = 3,
   float mxp_lacunarity = 2.0,
@@ -553,7 +550,7 @@ export float mx_fractal_noise_float(
     return result;
 }
 
-export float3 mx_fractal_noise_float3(
+export float3 mx_fractal3d_noise_float3(
   float3 mxp_p = state::transform_point(state::coordinate_internal, state::coordinate_object, state::position()),
   int mxp_octaves = 3,
   float mxp_lacunarity = 2.0,
@@ -573,7 +570,7 @@ export float3 mx_fractal_noise_float3(
     return result;
 }
 
-export float2 mx_fractal_noise_float2(
+export float2 mx_fractal3d_noise_float2(
   float3 mxp_p = state::transform_point(state::coordinate_internal, state::coordinate_object, state::position()),
   int mxp_octaves = 3,
   float mxp_lacunarity = 2.0,
@@ -586,7 +583,7 @@ export float2 mx_fractal_noise_float2(
                   mx_fractal_noise_float(mxp_p+float3(19, 193, 17), mxp_octaves, mxp_lacunarity, mxp_diminish));
 }
 
-export float4 mx_fractal_noise_float4(
+export float4 mx_fractal3d_noise_float4(
   float3 mxp_p = state::transform_point(state::coordinate_internal, state::coordinate_object, state::position()),
   int mxp_octaves = 3,
   float mxp_lacunarity = 2.0,

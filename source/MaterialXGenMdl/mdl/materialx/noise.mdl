@@ -579,8 +579,8 @@ export float2 mx_fractal3d_noise_float2(
     anno::noinline()
 ]]
 {
-    return float2(mx_fractal_noise_float(mxp_p, mxp_octaves, mxp_lacunarity, mxp_diminish),
-                  mx_fractal_noise_float(mxp_p+float3(19, 193, 17), mxp_octaves, mxp_lacunarity, mxp_diminish));
+    return float2(mx_fractal3d_noise_float(mxp_p, mxp_octaves, mxp_lacunarity, mxp_diminish),
+                  mx_fractal3d_noise_float(mxp_p+float3(19, 193, 17), mxp_octaves, mxp_lacunarity, mxp_diminish));
 }
 
 export float4 mx_fractal3d_noise_float4(
@@ -593,8 +593,8 @@ export float4 mx_fractal3d_noise_float4(
 ]]
 {
 
-    float3 c = mx_fractal_noise_float3(mxp_p, mxp_octaves, mxp_lacunarity, mxp_diminish);
-    float a = mx_fractal_noise_float(mxp_p+float3(19, 193, 17), mxp_octaves, mxp_lacunarity, mxp_diminish);
+    float3 c = mx_fractal3d_noise_float3(mxp_p, mxp_octaves, mxp_lacunarity, mxp_diminish);
+    float a = mx_fractal3d_noise_float(mxp_p+float3(19, 193, 17), mxp_octaves, mxp_lacunarity, mxp_diminish);
     return float4(c.x, c.y, c.z, a);
 }
 
